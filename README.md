@@ -25,4 +25,4 @@ Afterwards, the server were started `sudo service mongodb start` and the service
 
 ![mongodb-status](https://user-images.githubusercontent.com/46185705/132380458-79c6e091-6c32-4bf2-bbd6-89f352056218.jpg)
 
-
+Node Package manager was installed `sudo apt install -y npm`. Followed by a body parser which will help with the JSON file processing `sudo npm install body-parser`. In this directory 
