@@ -114,7 +114,113 @@ module.exports = mongoose.model('Book', bookSchema);
 
 On this stage, Angular was used to connect our webpages with Express and perform actions on our books register.
 
-First of all, the directory was changed back to __Books__ `cd ../..` and a directory called ___Public___ was created `mkdir public && cd public`. A file named script.js was 
+First of all, the directory was changed back to __Books__ `cd ../..` and a directory called ___Public___ was created `mkdir public && cd public`. A file named script.js was created using `vi script.js` and the following code was ran
 
+```
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+  $http( {
+    method: 'GET',
+    url: '/book'
+  }).then(function successCallback(response) {
+    $scope.books = response.data;
+  }, function errorCallback(response) {
+    console.log('Error: ' + response);
+  });
+  $scope.del_book = function(book) {
+    $http( {
+      method: 'DELETE',
+      url: '/book/:isbn',
+      params: {'isbn': book.isbn}
+    }).then(function successCallback(response) {
+      console.log(response);
+    }, function errorCallback(response) {
+      console.log('Error: ' + response);
+    });
+  };
+  $scope.add_book = function() {
+    var body = '{ "name": "' + $scope.Name + 
+    '", "isbn": "' + $scope.Isbn +
+    '", "author": "' + $scope.Author + 
+    '", "pages": "' + $scope.Pages + '" }';
+    $http({
+      method: 'POST',
+      url: '/book',
+      data: body
+    }).then(function successCallback(response) {
+      console.log(response);
+    }, function errorCallback(response) {
+      console.log('Error: ' + response);
+    });
+  };
+});
+```
 
+In the same public folder, `vi index.html` was used to create an index.html file and an html code was pasted into it
+
+```
+<!doctype html>
+<html ng-app="myApp" ng-controller="myCtrl">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <div>
+      <table>
+        <tr>
+          <td>Name:</td>
+          <td><input type="text" ng-model="Name"></td>
+        </tr>
+        <tr>
+          <td>Isbn:</td>
+          <td><input type="text" ng-model="Isbn"></td>
+        </tr>
+        <tr>
+          <td>Author:</td>
+          <td><input type="text" ng-model="Author"></td>
+        </tr>
+        <tr>
+          <td>Pages:</td>
+          <td><input type="number" ng-model="Pages"></td>
+        </tr>
+      </table>
+      <button ng-click="add_book()">Add</button>
+    </div>
+    <hr>
+    <div>
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Isbn</th>
+          <th>Author</th>
+          <th>Pages</th>
+
+        </tr>
+        <tr ng-repeat="book in books">
+          <td>{{book.name}}</td>
+          <td>{{book.isbn}}</td>
+          <td>{{book.author}}</td>
+          <td>{{book.pages}}</td>
+
+          <td><input type="button" value="Delete" data-ng-click="del_book(book)"></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+```
+
+![html file](https://user-images.githubusercontent.com/46185705/132508402-3b2244bd-b720-46e8-8a3e-d27739470081.jpg)
+
+Directory changed back to Books and the node server was started `node server.js`
+
+TCP prot set to 3300
+
+and the final output is show below using the public IP at port 3300 
+
+`18.218.23.139:3300`
+
+![tcp-3300](https://user-images.githubusercontent.com/46185705/132509472-60c5c3a6-69a2-4a14-bf67-3f57f2c3c0c9.jpg)
+![Completion](https://user-images.githubusercontent.com/46185705/132509482-fc0d4d3c-22fc-4f61-9832-7f5b96794de9.jpg)
 
